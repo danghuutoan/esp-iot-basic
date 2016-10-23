@@ -1,6 +1,6 @@
 XTENSA		?=
-SDK_BASE	?= /tools/esp8266/sdk/ESP8266_NONOS_SDK
-ESPTOOL		?= /tools/esp8266/esptool/esptool.py
+SDK_BASE	?= /home/toan/git/esp-open-sdk/ESP8266_NONOS_SDK
+ESPTOOL		?= /home/toan/git/esp-open-sdk/esptool/esptool.py
 SDK_LIBS 	:= -lc -lgcc -lhal -lphy -lpp -lnet80211 -lwpa -lmain -llwip -lcrypto -ljson
 CC			:= $(XTENSA)xtensa-lx106-elf-gcc
 LD			:= $(XTENSA)xtensa-lx106-elf-gcc
@@ -12,7 +12,8 @@ CFLAGS 		= -g -Wpointer-arith -Wundef -Wl,-EL -fno-inline-functions -nostdlib\
 			  -fno-builtin-printf -DICACHE_FLASH\
 			  -I.
 LD_SCRIPT	= -T$(SDK_BASE)/ld/eagle.app.v6.ld
-
+SERIAL_PORT ?= /dev/ttyUSB0
+BAUD		?= 115200
 all: main.bin
 
 main.bin: main.out
@@ -35,8 +36,8 @@ clean:
 	rm -rf *.o *.bin *.a *.out
 	
 flash:
-	$(ESPTOOL) --port /dev/tty.SLAB_USBtoUART \
-			   --baud 480600 \
+	$(ESPTOOL) --port $(SERIAL_PORT) \
+			   --baud $(BAUD) \
 			   write_flash --flash_freq 40m --flash_mode dio --flash_size 32m \
 			   0x00000 main0x00000.bin \
 			   0x10000 main0x10000.bin \

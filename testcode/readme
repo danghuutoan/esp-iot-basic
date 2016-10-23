@@ -1,0 +1,1 @@
+udp-send.c contain a small program to test udp server, the program does nothing but send 4 packet to a specific ip address and port.
