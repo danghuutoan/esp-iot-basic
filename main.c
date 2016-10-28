@@ -26,6 +26,33 @@
 #define SSID        "lau2"
 #define PASSWORD    "nganta1997"
 
+// char *header = 
+// "HTTP/1.1 200 OK\r\n"
+// "Date: Mon, 27 Jul 2009 12:28:53 GMT\r\n"
+// "Server: Apache/2.2.14 (Win32)\r\n"
+// "Last-Modified: Wed, 22 Jul 2009 19:15:56 GMT\r\n"
+// "Content-Length: 200\r\n"
+// "Content-Type: text/html\r\n"
+// "Connection: Closed\r\n"
+// "\r\n";
+
+char *html_txt =
+"HTTP/1.1 200 OK\r\n"
+"Date: Mon, 27 Jul 2009 12:28:53 GMT\r\n"
+"Server: Apache/2.2.14 (Win32)\r\n"
+"Last-Modified: Wed, 22 Jul 2009 19:15:56 GMT\r\n"
+"Content-Length: 200\r\n"
+"Content-Type: text/html\r\n"
+"Connection: Closed\r\n"
+"\r\n"
+"<!DOCTYPE HTML>\r\n" 
+"<html>\r\n"
+"<body>\r\n"
+"<h1>Hello, World!</h1>\r\n"
+"</p><form method='get' action='setting'><label>SSID: </label><input name='ssid' length=32><input name='pass' length=64><input type='submit'></form>\r\n"
+"</body>\r\n"
+"</html>\r\n";
+
 LOCAL void ICACHE_FLASH_ATTR tcp_server_sent_cb(void *arg)
 {
     //data sent successfully
@@ -41,7 +68,8 @@ tcp_server_recv_cb(void *arg, char *pusrdata, unsigned short length)
     struct espconn *pespconn = arg;
     os_printf("tcp recv : %s \r\n", pusrdata);
 
-    espconn_sent(pespconn, pusrdata, length);
+    // espconn_sent(pespconn, header, strlen(header));
+    espconn_sent(pespconn, html_txt, strlen(html_txt));
 
 }
 
