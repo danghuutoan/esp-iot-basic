@@ -7,3 +7,6 @@ map.txt
 *.bin
 *.o
 *.a
+.tags
+.tags_sorted_by_file
+source.sh
