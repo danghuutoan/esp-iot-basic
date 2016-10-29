@@ -13,7 +13,11 @@ CFLAGS 		= -g -Wpointer-arith -Wundef -Wl,-EL -fno-inline-functions -nostdlib\
 			  -I.
 LD_SCRIPT	= -T$(SDK_BASE)/ld/eagle.app.v6.ld
 SERIAL_PORT ?= /dev/ttyUSB0
-BAUD		?= 115200
+# BAUD		?= 230400
+# BAUD		?= 460800
+# BAUD		?= 576000
+# BAUD		?= 921600
+BAUD		?= 2000000
 all: main.bin
 
 main.bin: main.out

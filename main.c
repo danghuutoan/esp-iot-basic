@@ -23,6 +23,9 @@
 
 #include "espconn.h"
 
+// #define SSID        "The Coffee House"
+// #define PASSWORD    "thecoffeehouse"
+
 #define SSID        "lau2"
 #define PASSWORD    "nganta1997"
 
@@ -48,7 +51,7 @@ char *html_txt =
 "<!DOCTYPE HTML>\r\n" 
 "<html>\r\n"
 "<body>\r\n"
-"<h1>Hello, World!</h1>\r\n"
+"<h1>ESP8266 WIFI manager </h1>\r\n"
 "</p><form method='get' action='setting'><label>SSID: </label><input name='ssid' length=32><input name='pass' length=64><input type='submit'></form>\r\n"
 "</body>\r\n"
 "</html>\r\n";
@@ -63,14 +66,22 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_sent_cb(void *arg)
 LOCAL void ICACHE_FLASH_ATTR
 tcp_server_recv_cb(void *arg, char *pusrdata, unsigned short length)
 {
-    //received some data from tcp connection
-
+    char *pstr = NULL;
+    int pstr_len;
+    char *http_request_str = NULL;
     struct espconn *pespconn = arg;
-    os_printf("tcp recv : %s \r\n", pusrdata);
-
-    // espconn_sent(pespconn, header, strlen(header));
+    pstr = (char *)os_strstr(pusrdata, "\r\n");
+    pstr_len = pstr - pusrdata;
     espconn_sent(pespconn, html_txt, strlen(html_txt));
-
+    if(pstr_len > 0)
+    {
+        http_request_str = (char *)os_malloc(sizeof(char)*(pstr_len) +1);
+        os_memcpy(http_request_str, pusrdata, pstr_len);
+        http_request_str[pstr_len] = 0;
+    }
+    os_free(http_request_str);
+    os_printf("tcp recv : %s \r\n", pusrdata);
+    os_printf("http_request_str %s\r\n", http_request_str);
 }
 
 LOCAL void ICACHE_FLASH_ATTR tcp_server_discon_cb(void *arg)
@@ -133,7 +144,7 @@ void ICACHE_FLASH_ATTR user_esp_platform_check_ip(void)
 
         os_printf("got ip !!! \r\n");
 
-        user_tcpserver_init(1112);
+        user_tcpserver_init(8000);
 
     } else {
 
